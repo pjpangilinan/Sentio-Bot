@@ -35,10 +35,11 @@ def load_models():
     except OSError:
         st.error(
             "spaCy model 'en_core_web_sm' not found. "
-            "Please run 'python -m spacy download en_core_web_sm' in your terminal."
+            "Downloading...."
         )
-        st.stop()
-
+        from spacy.cli import download
+        download("en_core_web_sm")
+        nlp = spacy.load("en_core_web_sm")
 
 # Load the models
 models = load_models()
@@ -156,4 +157,5 @@ if st.session_state.analysis_report:
     </div>
     """
     st.markdown(card_html, unsafe_allow_html=True)
+
 
