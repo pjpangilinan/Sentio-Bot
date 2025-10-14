@@ -17,27 +17,41 @@ except LookupError:
     
 @st.cache_resource
 def load_models():
-    """Load the model pipeline and spaCy model."""
+    """Load the model pipeline and spaCy model, with robust error handling."""
     try:
-        # Load the single pipeline object that includes vectorizer and classifier
+        # Attempt to load models normally
         model_pipeline = joblib.load('sentiment_model_pipeline.pkl')
         nlp = spacy.load('en_core_web_sm')
-        return {
-            "pipeline": model_pipeline,
-            "nlp": nlp
-        }
+        return {"pipeline": model_pipeline, "nlp": nlp}
+
     except FileNotFoundError:
         st.error(
             "Model file ('sentiment_model_pipeline.pkl') not found. "
-            "Please run the nlp_pipeline.py script to train and save the model."
+            "Please ensure it's in the same directory and run the training script if needed."
         )
-        st.stop()
+        st.stop() # Halt the app if the main model is missing
+
     except OSError:
-        st.error(
-            "spaCy model 'en_core_web_sm' not found. "
-            "Downloading...."
-        )
-        subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm", "--user"])
+        st.warning("spaCy model 'en_core_web_sm' not found. Attempting to download...")
+        try:
+            # Attempt to download the model
+            subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm", "--user"], check=True)
+            
+            # After downloading, try to load it again
+            nlp = spacy.load('en_core_web_sm')
+            
+            # Also need to load the pipeline file again on this path
+            model_pipeline = joblib.load('sentiment_model_pipeline.pkl')
+            st.success("Successfully downloaded and loaded spaCy model. Please refresh the page.")
+            
+            # On this path, we must still return the models
+            return {"pipeline": model_pipeline, "nlp": nlp}
+
+        except Exception as e:
+            st.error(
+                f"Failed to download or load spaCy model after attempting: {e}. "
+                "Please run 'python -m spacy download en_core_web_sm --user' manually in your terminal and restart the app."
+            )
 
 
 # Load the models
@@ -156,6 +170,7 @@ if st.session_state.analysis_report:
     </div>
     """
     st.markdown(card_html, unsafe_allow_html=True)
+
 
 
 
