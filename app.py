@@ -20,7 +20,7 @@ def load_models():
     """Load the model pipeline and spaCy model."""
     try:
         # Load the single pipeline object that includes vectorizer and classifier
-        model_pipeline = joblib.load('./sentiment_model_pipeline.pkl')
+        model_pipeline = joblib.load('sentiment_model_pipeline.pkl')
         nlp = spacy.load('en_core_web_sm')
         return {
             "pipeline": model_pipeline,
@@ -156,6 +156,7 @@ if st.session_state.analysis_report:
     </div>
     """
     st.markdown(card_html, unsafe_allow_html=True)
+
 
 
 
