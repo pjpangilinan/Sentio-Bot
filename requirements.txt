@@ -1,10 +1,11 @@
 pandas
 numpy
 scikit-learn
-spaCy
+spacy==3.7.2
 streamlit
 joblib
 nltk
 matplotlib
 wordcloud
 seaborn
+
