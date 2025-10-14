@@ -14,8 +14,7 @@ try:
 except LookupError:
     st.info("Downloading NLTK stopwords...")
     nltk.download('stopwords')
-    st.stop()
-
+    
 @st.cache_resource
 def load_models():
     """Load the model pipeline and spaCy model."""
@@ -157,6 +156,7 @@ if st.session_state.analysis_report:
     </div>
     """
     st.markdown(card_html, unsafe_allow_html=True)
+
 
 
 
