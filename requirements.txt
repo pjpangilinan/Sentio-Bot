@@ -1,12 +1,10 @@
 pandas
 numpy
 scikit-learn
-spacy
+spaCy
 streamlit
 joblib
 nltk
 matplotlib
 wordcloud
 seaborn
-
-
