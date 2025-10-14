@@ -38,8 +38,6 @@ def load_models():
             "Downloading...."
         )
         subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm", "--user"])
-        nlp = spacy.load('en_core_web_sm')
-        return { "pipeline": model_pipeline, "nlp": nlp }
 
 # Load the models
 models = load_models()
@@ -157,6 +155,7 @@ if st.session_state.analysis_report:
     </div>
     """
     st.markdown(card_html, unsafe_allow_html=True)
+
 
 
 
