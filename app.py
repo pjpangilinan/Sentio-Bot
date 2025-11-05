@@ -21,7 +21,7 @@ def load_models():
     try:
         # Load the single pipeline object that includes vectorizer and classifier
         model_pipeline = joblib.load('sentiment_model_pipeline.pkl')
-        nlp = spacy.load('en_core_web_sm')
+        nlp = spacy.load('en_core_web_lg')
         return {
             "pipeline": model_pipeline,
             "nlp": nlp
@@ -34,10 +34,10 @@ def load_models():
         st.stop()
     except OSError:
         st.error(
-            "spaCy model 'en_core_web_sm' not found. "
+            "spaCy model 'en_core_web_lg' not found. "
             "Downloading...."
         )
-        subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm", "--user"])
+        subprocess.run(["python", "-m", "spacy", "download", "en_core_web_lg", "--user"])
 
 # Load the models
 models = load_models()
@@ -63,8 +63,24 @@ def ner_to_html(text, doc):
     html_parts = []
     last_end = 0
     colors = {
-        "PERSON": "#ffcce0", "ORG": "#cce0ff", "GPE": "#d4edda", "LOC": "#fff3cd",
-        "PRODUCT": "#f8d7da", "EVENT": "#e2e3e5", "DATE": "#d1ecf1", "MONEY": "#d6d8db"
+        "PERSON": "#fce1e4",         
+        "NORP": "#fcf4dd",           
+        "FAC": "#ddf4f3",          
+        "ORG": "#dde7f3",           
+        "GPE": "#e6ddef",         
+        "LOC": "#f9e6d8",          
+        "PRODUCT": "#d8f8d4",     
+        "EVENT": "#fdecdf",         
+        "WORK_OF_ART": "#e3e3e3",    
+        "LAW": "#fce8f3",          
+        "LANGUAGE": "#d1f7e8",       
+        "DATE": "#fefecd",          
+        "TIME": "#e9f7d1",        
+        "PERCENT": "#d1f7f7",        
+        "MONEY": "#d4f1f9",       
+        "QUANTITY": "#f9d4f1",      
+        "ORDINAL": "#fde4d6",        
+        "CARDINAL": "#d6d6d6"      
     }
     for ent in doc.ents:
         html_parts.append(text[last_end:ent.start_char])
@@ -155,6 +171,7 @@ if st.session_state.analysis_report:
     </div>
     """
     st.markdown(card_html, unsafe_allow_html=True)
+
 
 
 
